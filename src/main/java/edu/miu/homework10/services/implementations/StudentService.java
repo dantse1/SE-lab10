@@ -1,0 +1,39 @@
+package edu.miu.homework10.services.implementations;
+
+import edu.miu.homework10.models.Student;
+import edu.miu.homework10.repositories.StudentRepository;
+import edu.miu.homework10.services.IStudent;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ *
+ * @author Daniel Tsegay Meresie
+ */
+@Service
+public class StudentService implements IStudent{
+   
+    @Autowired
+    private StudentRepository studentRepository;
+   
+    @Override
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
+
+    @Override
+    public void deleteStudent(Student student) {
+    }
+
+    @Override
+    public Student getStudentById(Integer id) {
+        return studentRepository.findById(id).get();
+    }
+
+    @Override
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
+    }
+    
+}
