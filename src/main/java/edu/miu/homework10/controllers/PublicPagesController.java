@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Daniel Tsegay Meresie
  */
 @Controller
+
 public class PublicPagesController {
 
     @Autowired
@@ -42,17 +43,29 @@ public class PublicPagesController {
     }
 
     @PostMapping(value = "/add")
-    public String addStudent(@Valid @ModelAttribute("student") Student student,
-            BindingResult bindingResult, Model model) {
+    public ModelAndView addStudent(@Valid @ModelAttribute("student") Student student,
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("student", student);
-            model.addAttribute("errors", bindingResult.getAllErrors());
-            return "/addStudent";
+            System.out.println("error encountered");
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("student", student);
+            mav.addObject("errors", bindingResult.getAllErrors());
+            mav.setViewName("/addStudent");
+            //model.addAttribute("student", student);
+            //model.addAttribute("errors", bindingResult.getAllErrors());
+            //model.
+            //return "/addStudent";
+            
+            return mav;
 
         }
 
         studentService.addStudent(student);
-        return "redirect:/";
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("students",studentService.getAllStudents());
+        mav.setViewName("/index");
+        return mav;
+        //return "redirect:/";
     }
 
     @GetMapping("/showUpdateForm")
@@ -61,6 +74,7 @@ public class PublicPagesController {
         Student student = studentService.getStudentById(studentId);
         mav.addObject("student", student);
         mav.setViewName("/addStudent");
+        //return "/addStudent";
         return mav;
     }
 
